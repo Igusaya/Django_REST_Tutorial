@@ -3,6 +3,17 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from snippets import views
 from django.conf.urls import include
 
+from snippets.views import UserViewSet
+from rest_framework import renderers
+
+
+user_list = UserViewSet.as_view({
+    'get': 'list'
+})
+user_detail = UserViewSet.as_view({
+    'get': 'retrieve'
+})
+
 urlpatterns = [
     path('', views.api_root),
     path('snippets/',
@@ -15,10 +26,10 @@ urlpatterns = [
         views.SnippetHighlight.as_view(),
         name='snippet-highlight'),
     path('users/',
-        views.UserList.as_view(),
+        user_list,
         name='user-list'),
     path('users/<int:pk>/',
-        views.UserDetail.as_view(),
+        user_detail,
         name='user-detail'),
     path('api-auth/',
         include('rest_framework.urls')),
