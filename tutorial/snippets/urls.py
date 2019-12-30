@@ -1,12 +1,23 @@
-from django.urls import path
-from rest_framework.urlpatterns import format_suffix_patterns
+from django.conf.urls import include, url
+from rest_framework.routers import DefaultRouter
 from snippets import views
-from django.conf.urls import include
 
 from snippets.views import UserViewSet, SnippetViewSet, api_root
 from rest_framework import renderers
+from rest_framework.urlpatterns import format_suffix_patterns
+
+# Create a router and register our viewsets whith it.
+router = DefaultRouter()
+router.register(r'snippets', views.SnippetViewSet)
+router.register(r'users', views.UserViewSet)
+
+# The API URLs are now detemined automatically by the router.
+urlpatterns = [
+        url(r'^', include(router.urls))
+]
 
 
+"""
 snippet_list = SnippetViewSet.as_view({
     'get': 'list',
     'post': 'create'
@@ -49,3 +60,4 @@ urlpatterns = [
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
+"""
